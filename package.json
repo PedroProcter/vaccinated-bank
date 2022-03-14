@@ -1,0 +1,19 @@
+{
+  "name": "vaccinated-bank",
+  "version": "1.0.0",
+  "description": "Blazor server to interact with a vaccinated people database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PedroProcter/vaccinated-bank.git"
+  },
+  "author": "[PedroProcter, Albert Joan]",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PedroProcter/vaccinated-bank/issues"
+  },
+  "homepage": "https://github.com/PedroProcter/vaccinated-bank#readme"
+}
