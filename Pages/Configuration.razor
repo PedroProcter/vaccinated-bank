@@ -1,0 +1,46 @@
+@page "/config"
+
+<h1>Configuracion</h1>
+
+
+@* <input @bind="provincia" >
+
+<button @onclick="addProvince">Agregar provincia</button>
+
+
+
+<input @bind="vacuna">
+
+<button @onclick="addVaccine">Agregar vacuna</button>
+ *@
+@code{
+private string value_province = "provincia" ;
+private string value_vacinne ="vacuna";
+
+private string provincia {get; set;}
+private string vacuna {get; set;}
+
+public async void addVaccine(){
+
+using(var db = new vaccinationsContext()){
+ db.Add(new Vaccine {
+   Vaccine1 = vacuna
+ });
+
+ await db.SaveChangesAsync();
+}
+
+}
+public async void addProvince(){
+
+using(var db = new vaccinationsContext()){
+ db.Add(new Province {
+   Province1 = provincia
+ });
+
+ await db.SaveChangesAsync();
+}
+
+}
+  
+}

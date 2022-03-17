@@ -1,0 +1,39 @@
+@page "/anular"
+
+<h1>Anular registro</h1>
+
+@* @foreach(var i in vacunados){
+<h3> @i.Id --> @i.Cedula</h3>
+}
+
+<input @bind="cedula">
+
+<button @onclick="anularVacunado">Anular registro</button> *@
+@code{
+
+dynamic vacunados = new vaccinationsContext().Vaccinateds.ToList();
+private string cedula {get; set;}
+
+public List<Vaccinated> idVacunado(){
+    List<Vaccinated> id = new List<Vaccinated>();
+using(var db = new vaccinationsContext()){
+    ;
+    var vacunados =  db.Vaccinateds.Where(s => s.Cedula == cedula);
+    foreach(var i in vacunados){
+       id.Add(new Vaccinated{Id = i.Id});
+    }
+}
+   return id ;
+}
+public void anularVacunado(){
+
+Console.WriteLine(idVacunado());
+using(var db = new vaccinationsContext()){
+    db.Vaccinateds.RemoveRange(idVacunado());
+    db.SaveChanges();
+    Console.WriteLine("Eliminado");
+}
+
+}
+
+}
