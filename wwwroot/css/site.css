@@ -4,6 +4,8 @@
 
 html, body {
     font-family: 'Public Sans', sans-serif;
+
+    background-color: rgb(240, 240, 240);
 }
 
 h1, h2, h3, h4, h5 {
