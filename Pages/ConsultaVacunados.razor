@@ -1,0 +1,27 @@
+@page "/consultarVacunados"
+
+<h1>Consultas</h1>
+
+
+@* <input @onchange="OnChangeEvent1">
+
+@if(matches == null){
+
+}else{
+@if(value != ""){
+@foreach(var i in matches){
+    <h1>@i.nombre  cantidad de vacunas @i.counter  </h1>
+}
+}
+}
+ *@
+@code{
+string value = "";
+dynamic matches;
+ public void OnChangeEvent1(ChangeEventArgs args ){
+      value = (string) args.Value;
+
+matches = new vaccinationsContext().Vaccinateds.Where(s => s.Name == value).GroupBy(s => s.Name).Select(p => new{nombre = p.Key, counter = p.Count()});
+ }
+
+}

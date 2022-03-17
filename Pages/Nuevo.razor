@@ -1,0 +1,409 @@
+﻿@page "/counter"
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Agregar</h1>
+
+@* 
+
+
+<input @bind="name" required>
+<input @bind="lastName">
+<input @bind="cedula" placeholder="cedula" required>
+<input @bind="phone">
+<input type="date" @bind="birthDate" min="1950-1-1" required>
+
+
+<select @bind="vaccine" required>
+    <option>Vacunas</option>
+
+    @foreach (var pro in vacunas)
+    {
+        <option value="@pro.Vaccine1">@pro.Vaccine1</option>
+    }
+
+</select>
+
+<select @bind="province" required>
+    <option>Provincias</option>
+
+    @foreach (var i in provincias)
+    {
+        <option value="@i.Province1">@i.Province1</option>
+    }
+
+</select>
+<input type="date" min="2022-3-14" @bind="dateVaccine" required>
+<button @onclick="guardar">Guardar</button>
+
+<h1 style="@hiden;color:red">Ya existe un usuario con este numero de cedula </h1>
+<h1 style="@hoden;color:red">Por favor llene los campos </h1>
+
+@if(vacunados == null){
+
+}else{
+
+@foreach(var i in vacunados){
+<h3>@i.Name</h3>
+<h3>@i.LastName</h3>
+<h3>@i.Cedula</h3>
+<h3>@i.Phone</h3>
+<h3>@i.BirthDate</h3>
+<h3>@i.Vaccine</h3>
+<h3>@i.Province</h3>
+<h3>@i.ZodiacSign</h3>
+<h3>@i.DateVaccine</h3>
+}
+
+<select @bind="vaccine">
+    <option>Vacunas</option>
+    @if(vacunas == null)
+{           
+     <option >No ha agregado ningun tipo de vacuna</option>
+}else{
+
+    @foreach (var pro in vacunas)
+    {
+        <option value="@pro.Vaccine1">@pro.Vaccine1</option>
+    }
+    }
+
+
+</select>
+
+<select @bind="province">
+    <option>Provincias</option>
+    @if(provincias == null){
+            <option >No ha agregado ninguna provincia</option>
+    }else{
+    @foreach (var pro in provincias)
+    {
+        <option value="@pro.Province1">@pro.Province1</option>
+    }
+    }
+
+</select>
+<input type="date" min="2022-3-14" @bind="dateVaccine" placeholder="Fecha de vacunacion">
+
+<button @onclick="otra_dosis"></button>
+}
+ *@
+@code {
+    List<Province> provincias = new vaccinationsContext().Provinces.ToList();
+    List<Vaccine> vacunas = new vaccinationsContext().Vaccines.ToList();
+
+    string hiden = "display:none";
+    string hoden = "display:none";
+    string name { get; set; }
+    string lastName { get; set; }
+    string cedula { get; set; }
+    string phone { get; set; }
+    DateOnly? birthDate = new DateOnly(1950, 01, 01);
+    string vaccine { get; set; }
+    string province { get; set; }
+    string zodiacSign { get; set; }
+    DateOnly dateVaccine = new DateOnly(2022, 01, 01);
+    private List<Vaccinated> vacunados;
+
+public bool campos_vacios(){
+    bool vacio = true;
+    if(name == null || name == ""){
+      vacio = false;
+    }else if( lastName == null || lastName == ""){
+      vacio = false;
+    }else if(cedula== null || cedula == "" ){
+vacio = false;
+    }else if( phone== null || phone == "" ){
+vacio = false;
+
+    }else if(vaccine == null || vaccine == "" ){
+vacio = false;
+
+    }else if(province == null || province == ""){
+vacio = false;
+    }
+    return vacio;
+}
+
+    public bool exists(string NCedula,int existe)
+    {
+    bool exixste_o_no =false;
+        if(existe == 1){
+        using (var db = new vaccinationsContext())
+        {
+            foreach (var i in db.Vaccinateds)
+            {
+                if (NCedula == i.Cedula)
+                {
+                    exixste_o_no = true;
+                }
+            }
+        }
+
+        }
+                    return exixste_o_no;
+
+
+
+    }
+
+    public int exists(string NCedula)
+    {
+        int counter = 0;
+        int exixste_o_no =0;
+        using (var db = new vaccinationsContext())
+        {
+            foreach (var i in db.Vaccinateds)
+            {
+
+                if (NCedula == i.Cedula)
+                {
+                    counter ++;
+               } 
+               if(counter ==1){
+                    hiden = "display:block";
+                    exixste_o_no = 1;
+               }
+               if(counter > 1 ){
+                 exixste_o_no = 2;
+               }
+               if (counter == 0)
+                {
+                    hiden = "display:none";
+                    exixste_o_no = 0;
+
+                }
+            }
+                Console.WriteLine(counter);
+            return exixste_o_no;
+        }
+
+    }
+
+
+public  void  otra_dosis(){
+           foreach(var i in vacunados){
+name = i.Name;
+lastName = i.LastName;
+cedula=i.Cedula;
+phone = i.Phone;
+birthDate = i.BirthDate;
+zodiacSign  = i.ZodiacSign;
+
+           }
+          using(var db = new vaccinationsContext()){
+             db.Add( new Vaccinated{
+
+                    Name = name,
+                    LastName =lastName ,
+                    Cedula = cedula,
+                    Phone = phone,
+                    BirthDate = birthDate,
+                    Vaccine = vaccine,
+                    Province = province,
+                    ZodiacSign = zodiacSign,
+                    DateVaccine = dateVaccine
+          });
+           db.SaveChanges();
+           limpiar_variables();
+          }
+}
+
+    public  void guardar()
+    {
+
+        if ( exists(cedula) == 1)
+        {
+            Console.WriteLine("Ya hay un usuario con esta cedula");
+            vacunados = new vaccinationsContext().Vaccinateds.Where(s => s.Cedula == cedula).ToList();
+                            limpiar_variables();
+            return;
+        }else  if(exists(cedula) == 2){
+            Console.WriteLine("Este usuraio ya tiene 2 dosis");
+                limpiar_variables();
+                return;
+            }
+        else
+        {
+            if(campos_vacios()){
+            hiden = "display:none";
+            var date = new DateOnly();
+            using (var vacuna = new vaccinationsContext())
+            {
+                vacuna.Add(new Vaccinated
+                {
+
+                    Name = name,
+                    LastName = lastName,
+                    Cedula = cedula,
+                    Phone = phone,
+                    BirthDate = birthDate,
+                    Vaccine = vaccine,
+                    Province = province,
+                    ZodiacSign = sing(birthDate),
+                    DateVaccine = dateVaccine
+
+                });
+                 vacuna.SaveChanges();
+                limpiar_variables();
+                Console.WriteLine("Datos Guardados");
+            }
+
+        }else{
+            hoden ="display:block";
+        }
+        }
+    }
+
+
+    public void limpiar_variables() {
+      name = string.Empty;
+     lastName = string.Empty;
+     cedula = string.Empty;
+     phone = string.Empty;
+    birthDate = new DateOnly(1950, 01, 01);
+     vaccine = "Vacunas";
+     province = "Provincias";
+     zodiacSign = string.Empty;
+     dateVaccine = new DateOnly(2022, 01, 01);
+    }
+
+
+
+    public string sing(dynamic date){
+      int mes=0;
+      int dia=0;
+
+mes = date.Month;
+dia = date.Day;
+
+      string signo="";
+        switch (mes)
+        {
+            case 1:
+                if (dia > 21)
+                {
+                    signo = "ACUARIO";
+                }
+                else
+                {
+                    signo = "CAPRICORNIO";
+                }
+                break;
+            case 2:
+                if (dia > 19)
+                {
+                    signo = "PISCIS";
+                }
+                else
+                {
+                    signo = "ACUARIO";
+                }
+                break;
+            case 3:
+                if (dia > 20)
+                {
+                    signo = "ARIES";
+                }
+                else
+                {
+                    signo = "PISCIS";
+                }
+                break;
+            case 4:
+                if (dia > 20)
+                {
+                    signo = "TAURO";
+                }
+                else
+                {
+                    signo = "ARIES";
+                }
+                break;
+            case 5:
+                if (dia > 21)
+                {
+                    signo = "GEMINIS";
+                }
+                else
+                {
+                    signo = "TAURO";
+                }
+                break;
+            case 6:
+                if (dia > 20)
+                {
+                    signo = "CANCER";
+                }
+                else
+                {
+                    signo = "GEMINIS";
+                }
+                break;
+            case 7:
+                if (dia > 22)
+                {
+                    signo = "LEO";
+                }
+                else
+                {
+                    signo = "CANCER";
+                }
+                break;
+            case 8:
+                if (dia > 21)
+                {
+                    signo = "VIRGO";
+                }
+                else
+                {
+                    signo = "LEO";
+                }
+                break;
+            case 9:
+                if (dia > 22)
+                {
+                    signo = "LIBRA";
+                }
+                else
+                {
+                    signo = "VIRGO";
+                }
+                break;
+            case 10:
+                if (dia > 22)
+                {
+                    signo = "ESCORPIO";
+                }
+                else
+                {
+                    signo = "LIBRA";
+                }
+                break;
+            case 11:
+                if (dia > 21)
+                {
+                    signo = "SAGITARIO";
+                }
+                else
+                {
+                    signo = "ESCORPION";
+                }
+                break;
+            case 12:
+                if (dia > 21)
+                {
+                    signo = "CAPRICORNIO";
+                }
+                else
+                {
+                    signo = "SAGITARIO";
+                }
+                break;
+
+        }
+        return signo;
+
+
+    }
+}
