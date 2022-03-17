@@ -1,8 +1,110 @@
-<article class="m-5 grid grid-cols-3 gap-5">
-    @for (int i = 0; i < 22; i++)
+<article class="mt-10 ml-10 flex items-start">
+    <section>
+        <label class="mr-1" for="filter">Search</label>
+        <input class="mr-10" @bind="@filter" id="filter" name="filter" type="text">
+    </section>
+
+    <section>
+        <label for="order-by">Order By</label>
+        <select @bind="@order_by" id='order-by' name='order-by'>
+            <option></option>
+            <option>Province</option>
+            <option>Vaccine</option>
+            <option>Zodiac Sign</option>
+        </select>
+    </section>
+</article>
+
+<article class="m-5 grid grid-cols-fill-40 justify-center justify-items-stretch gap-10">
+    @if (@order_by == "Province")
     {
-        <section class="bg-white rounded-md shadow-md min-h-[188px] min-w-[100px] max-w-[276px] max-h-[276px]">
-            <h3>Title</h3>
-        </section>
+        @if (Vacunas_por_provincias != null)
+        {
+            @foreach (var i in Vacunas_por_provincias)
+            {
+                if (filter != null && filter != "") {
+                    if (@i.Province.ToLower().Contains(@filter.ToLower())) {
+                        <section class="bg-white text-center rounded-md shadow-xl min-h-[276px] min-w-[184px]">
+                            <h3>@i.Name @i.LastName</h3>
+                            <p>count: @i.Cedula</p>
+                            <p><b>@i.Province</b></p>
+                        </section>
+                    }
+                } else {
+                    <section class="bg-white text-center rounded-md shadow-xl min-h-[276px] min-w-[184px]">
+                        <h3>@i.Name @i.LastName</h3>
+                        <p>count: @i.Cedula</p>
+                        <p><b>@i.Province</b></p>
+                    </section>
+                }
+            }
+        }
+    }
+    else if (@order_by == "Vaccine")
+    {
+        @if (marcas_vacunas != null)
+        {
+            @foreach (var i in marcas_vacunas)
+            {
+                <section class="bg-white rounded-md shadow-xl min-h-[276px] min-w-[184px]">
+                    <h3>@i.provin</h3>
+                    <p>count: @i.vacunados</p>
+                </section>
+            }
+        }
+    }
+    else if (@order_by == "Zodiac Sign")
+    {
+        @if (signo != null)
+        {
+            @foreach (var i in signo)
+            {
+                <section class="bg-white rounded-md shadow-xl min-h-[276px] min-w-[184px]">
+                    <h3>@i.signos</h3>
+                    <p>count: @i.vacunados</p>
+                </section>
+            }
+        }
+    }
+    else
+    {
+        @if (vaccinated != null)
+        {
+            @foreach (var i in vaccinated)
+            {
+                if (filter != null && filter != "") {
+                    if (@i.Name.ToLower().Contains(@filter.ToLower()) || @i.LastName.ToLower().Contains(@filter.ToLower())) {
+                        <section class="bg-white text-center rounded-md shadow-xl min-h-[276px] min-w-[184px]">
+                            <h3>@i.Name @i.LastName</h3>
+                            <p>count: @i.Cedula</p>
+                        </section>
+                    }
+                } else {
+                    <section class="bg-white text-center rounded-md shadow-xl min-h-[276px] min-w-[184px]">
+                        <h3>@i.Name @i.LastName</h3>
+                        <p>count: @i.Cedula</p>
+                    </section>
+                }
+                
+            }
+        }
     }
 </article>
+
+@code {
+    string order_by;
+    string filter = null;
+
+    dynamic Vacunas_por_provincias = new vaccinationsContext().Vaccinateds.Select(x => x).ToList();
+    dynamic marcas_vacunas = new vaccinationsContext().Vaccinateds.GroupBy(s => s.Vaccine).Select(s => new
+    {
+        provin = s.Key,
+        vacunados = s.Count()
+    });
+    dynamic signo = new vaccinationsContext().Vaccinateds.GroupBy(s => s.ZodiacSign).Select(s => new
+    {
+        signos = s.Key,
+        vacunados = s.Count()
+    });
+    dynamic vaccinated = new vaccinationsContext().Vaccinateds.Select(x => x).ToList();
+}
