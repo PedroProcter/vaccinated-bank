@@ -6,14 +6,6 @@
 <h1 class="mt-10 ml-2 text-3xl font-black text-gray-600">Edit</h1>
 <div class="flex justify-center items-center">
 
-<div class="@hiden transition-all duration-500 border px-4 py-5 border-yellow-400 bg-yellow-300 text-yellow-900">
-  Debe llenar todos los campos para registrarse
-</div> 
-
-<div class="@daDOSIS transition-all duration-500 border px-4 py-5 border-green-400 bg-green-300 text-green-900">
- Segunda dosis agregada con exito
-</div> 
-
 </div>
 <div></div>
 </div>
@@ -22,9 +14,10 @@
 <span class="oi oi-moon absolute top-4 right-5 text-2xl hover:text-blue-900 transition-colors duration-500"></span>
 <span
     class="oi oi-sun absolute top-4 right-5 text-2xl hover:text-amber-600 transition-colors duration-500 hidden"></span>
-<div class="grid grid-cols-2">
-<div class="m-10 p-5 max-w-[588px] bg-gray-200 rounded-md shadow-xl border-r-2 border-l-2 border-b-2 border-gray-300">
-    <h2 class="text-2xl text-bold text-gray-500 mb-3">Add</h2>
+<div class="flex flex-wrap">
+<div class="m-7 p-5 min-w-[500px] max-w-[588px] bg-gray-200 rounded-md shadow-xl border-r-2 border-l-2 border-b-2 border-gray-300">
+    <h2 class="text-2xl text-bold text-gray-500">Add</h2>
+    <hr class="border-gray-400 mt-2 mb-3">
     <label class="mr-2" for="name">Name</label>
     <input class="m-2 rounded-sm p-1 border-2 border-gray-300" @bind="name" id="name" name="name" placeholder="Amaudis"
         required>
@@ -53,7 +46,7 @@
     <br>
     <label class="mr-2" for="provinces">Provinces</label>
     <select class="rounded-sm p-1 border-2 border-gray-300" @bind="province" id="provinces" name="provinces" required>
-        <option>Provincias</option>
+        <option>Province</option>
         @foreach (var i in provincias)
         {
             <option value="@i.Province1">@i.Province1</option>
@@ -65,8 +58,7 @@
     <br>
     <label class="mr-2" for="vaccines">Vaccines</label>
     <select class="rounded-sm p-1 border-2 border-gray-300" @bind="vaccine" id="vaccines" name="vaccines" required>
-        <option>Vacunas</option>
-
+        <option>Vaccine</option>
         @foreach (var pro in vacunas)
         {
             <option value="@pro.Vaccine1">@pro.Vaccine1</option>
@@ -78,17 +70,23 @@
     <br>
     <button class="m-1 p-2 bg-green-600 text-white rounded-sm hover:bg-green-800 transition-colors duration-500"
         @onclick="guardar">Guardar</button>
+    <div class="@hiden transition-all duration-500 border px-4 py-5 border-yellow-400 bg-yellow-300 text-yellow-900">
+        @yellow_banner
+    </div> 
+
+    <div class="@daDOSIS transition-all duration-500 border px-4 py-5 border-green-400 bg-green-300 text-green-900">
+        Segunda dosis agregada con exito
+    </div> 
 </div>
 
-
-
+<br>
 
 @if (vacunados == null){
 }else{
     @foreach (var i in vacunados)
     {
 
-    <div class="m-10 p-5 max-w-[588px] bg-gray-200 rounded-md shadow-xl border-r-2 border-l-2 border-b-2 border-gray-300">
+    <div class="m-10 p-5 min-w-[500px] max-w-[588px] bg-gray-200 rounded-md shadow-xl border-r-2 border-l-2 border-b-2 border-gray-300">
     <h2 class="text-2xl text-bold text-gray-500 mb-3">second dose</h2>
     <label class="mr-2" for="name">Name</label>
     <input class="m-2 rounded-sm p-1 border-2 border-gray-300" @bind="i.Name" id="name" name="name" placeholder="Amadis"
@@ -118,6 +116,7 @@
     <br>
     <label class="mr-2" for="provinces">Provinces</label>
     <select class="rounded-sm p-1 border-2 border-gray-300" @bind="province2" id="provinces" name="provinces" required>
+        <option>Province</option>
         @foreach (var pro in provincias)
         {
             <option value="@pro.Province1">@pro.Province1</option>
@@ -129,6 +128,7 @@
     <br>
     <label class="mr-2" for="vaccines">Vaccines</label>
     <select class="rounded-sm p-1 border-2 border-gray-300" @bind="vaccine2" id="vaccines" name="vaccines" required>
+        <option>Vaccine</option>
         @foreach (var pro in vacunas)
         {
             <option value="@pro.Vaccine1">@pro.Vaccine1</option>
@@ -140,6 +140,13 @@
     <br>
     <button class="m-1 p-2 bg-green-600 text-white rounded-sm hover:bg-green-800 transition-colors duration-500"
         @onclick="otra_dosis">Add second dose</button>
+    <div class="@hiden transition-all duration-500 border px-4 py-5 border-yellow-400 bg-yellow-300 text-yellow-900">
+        Debe llenar todos los campos para registrarse
+    </div> 
+
+    <div class="@daDOSIS transition-all duration-500 border px-4 py-5 border-green-400 bg-green-300 text-green-900">
+        Segunda dosis agregada con exito
+    </div> 
 </div>
 @*         <h3>@i.Name</h3>
         <h3>@i.LastName</h3>
@@ -159,6 +166,7 @@
     List<Vaccine> vacunas = new vaccinationsContext().Vaccines.ToList();
 
     string hiden = "hidden";
+    string yellow_banner = "There is missing data";
     string daDOSIS = "hidden";
 
     string hoden = "display:none";
@@ -197,14 +205,15 @@
         {
             vacio = false;
         }
-        else if (vaccine == null || vaccine == "")
+        else if (vaccine == null || vaccine == "" || vaccine == "Vaccine")
         {
             vacio = false;
         }
-        else if (province == null || province == "")
+        else if (province == null || province == "" || province =="Province")
         {
             vacio = false;
         }
+        yellow_banner = "There is missing data";
         return vacio;
     }
 
@@ -273,27 +282,36 @@
             birthDate = i.BirthDate;
             zodiacSign = i.ZodiacSign;
         }
-
-        using (var db = new vaccinationsContext())
+        
+        if (vaccine2 == null || vaccine2 == "" || vaccine2 == "Vaccine")
         {
-            db.Add(new Vaccinated
+            hiden = "";
+        }
+        else if (province2 == null || province2 == "" || province2 =="Province")
+        {
+            hiden = "";
+        } else {
+            using (var db = new vaccinationsContext())
             {
-                Name = name,
-                LastName = lastName,
-                Cedula = cedula,
-                Phone = phone,
-                BirthDate = birthDate,
-                Vaccine = vaccine2,
-                Province = province2,
-                ZodiacSign = zodiacSign,
-                DateVaccine = dateVaccine
-            });
-            db.SaveChanges();
-            limpiar_variables();
-                        daDOSIS = "";
+                db.Add(new Vaccinated
+                {
+                    Name = name,
+                    LastName = lastName,
+                    Cedula = cedula,
+                    Phone = phone,
+                    BirthDate = birthDate,
+                    Vaccine = vaccine2,
+                    Province = province2,
+                    ZodiacSign = zodiacSign,
+                    DateVaccine = dateVaccine
+                });
+                db.SaveChanges();
+                hiden = "hidden";
+                limpiar_variables();
+                            daDOSIS = "";
 
-            vacunados =null;
-
+                vacunados =null;
+            }
         }
     }
 
@@ -304,6 +322,7 @@
         if (exists(cedula) == 1)
         {
             Console.WriteLine("Ya hay un usuario con esta cedula");
+            yellow_banner = "ID already in use";
             vacunados = new vaccinationsContext().Vaccinateds.Where(s => s.Cedula == cedula).ToList();
                             hiden="hidden";
 
@@ -313,6 +332,7 @@
         else if (exists(cedula) == 2)
         {
             Console.WriteLine("Este usuraio ya tiene 2 dosis");
+            yellow_banner = "Already has two vaccines";
             limpiar_variables();
             return;
         }
@@ -321,6 +341,7 @@
             if (campos_vacios())
             {
                 hiden="hidden";
+                yellow_banner = "There is missing data";
                 var date = new DateOnly();
                 using (var vacuna = new vaccinationsContext())
                 {
@@ -362,6 +383,7 @@
         province = "Provincias";
         zodiacSign = string.Empty;
         dateVaccine = new DateOnly(2022, 01, 01);
+        yellow_banner = "There is missing data";
     }
 
     public string sing(dynamic date)
