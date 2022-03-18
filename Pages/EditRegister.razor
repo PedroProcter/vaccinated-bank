@@ -1,14 +1,29 @@
 @page "/editRegisters"
-
+@using System.Threading
 <PageTitle>Vaccinated - Edit</PageTitle>
 
+<div class="flex justify-between">
 <h1 class="mt-10 ml-2 text-3xl font-black text-gray-600">Edit</h1>
+<div class="flex justify-center items-center">
+
+<div class="@hiden transition-all duration-500 border px-4 py-5 border-yellow-400 bg-yellow-300 text-yellow-900">
+  Debe llenar todos los campos para registrarse
+</div> 
+
+<div class="@daDOSIS transition-all duration-500 border px-4 py-5 border-green-400 bg-green-300 text-green-900">
+ Segunda dosis agregada con exito
+</div> 
+
+</div>
+<div></div>
+</div>
+
 <hr class="border-gray-300">
 <span class="oi oi-moon absolute top-4 right-5 text-2xl hover:text-blue-900 transition-colors duration-500"></span>
 <span
     class="oi oi-sun absolute top-4 right-5 text-2xl hover:text-amber-600 transition-colors duration-500 hidden"></span>
-
-<form class="m-10 p-5 max-w-[588px] bg-gray-200 rounded-md shadow-xl border-r-2 border-l-2 border-b-2 border-gray-300">
+<div class="grid grid-cols-2">
+<div class="m-10 p-5 max-w-[588px] bg-gray-200 rounded-md shadow-xl border-r-2 border-l-2 border-b-2 border-gray-300">
     <h2 class="text-2xl text-bold text-gray-500 mb-3">Add</h2>
     <label class="mr-2" for="name">Name</label>
     <input class="m-2 rounded-sm p-1 border-2 border-gray-300" @bind="name" id="name" name="name" placeholder="Amaudis"
@@ -38,6 +53,7 @@
     <br>
     <label class="mr-2" for="provinces">Provinces</label>
     <select class="rounded-sm p-1 border-2 border-gray-300" @bind="province" id="provinces" name="provinces" required>
+        <option>Provincias</option>
         @foreach (var i in provincias)
         {
             <option value="@i.Province1">@i.Province1</option>
@@ -49,6 +65,8 @@
     <br>
     <label class="mr-2" for="vaccines">Vaccines</label>
     <select class="rounded-sm p-1 border-2 border-gray-300" @bind="vaccine" id="vaccines" name="vaccines" required>
+        <option>Vacunas</option>
+
         @foreach (var pro in vacunas)
         {
             <option value="@pro.Vaccine1">@pro.Vaccine1</option>
@@ -60,19 +78,70 @@
     <br>
     <button class="m-1 p-2 bg-green-600 text-white rounded-sm hover:bg-green-800 transition-colors duration-500"
         @onclick="guardar">Guardar</button>
-</form>
+</div>
 
-<h1 style="@hiden;color:red">Ya existe un usuario con este numero de cedula </h1>
-<h1 style="@hoden;color:red">Por favor llene los campos </h1>
 
-@if (vacunados == null)
-{
-}
-else
-{
+
+
+@if (vacunados == null){
+}else{
     @foreach (var i in vacunados)
     {
-        <h3>@i.Name</h3>
+
+    <div class="m-10 p-5 max-w-[588px] bg-gray-200 rounded-md shadow-xl border-r-2 border-l-2 border-b-2 border-gray-300">
+    <h2 class="text-2xl text-bold text-gray-500 mb-3">second dose</h2>
+    <label class="mr-2" for="name">Name</label>
+    <input class="m-2 rounded-sm p-1 border-2 border-gray-300" @bind="i.Name" id="name" name="name" placeholder="Amadis"
+        required disabled>
+    <br>
+    <label class="mr-2" for="lastname">Lastname</label>
+    <input class="rounded-sm p-1 border-2 border-gray-300" @bind="@i.LastName" id="lastname" name="lastname"
+        placeholder="Suarez" disabled>
+    <br>
+    <hr class="border-gray-300 mt-4">
+    <br>
+    <label class="mr-2" for="cedula">Cedula</label>
+    <input class="m-2 rounded-sm p-1 border-2 border-gray-300" @bind="@i.Cedula" id="cedula" name="cedula"
+        placeholder="cedula" required disabled>
+    <br>
+    <label class="mr-2" for="birthday">Birthday</label>
+    <input class="rounded-sm p-1 border-2 border-gray-300" type="date" @bind="@i.BirthDate" id="birthday" name="birthday"
+        min="1950-1-1" required disabled>
+    <br>
+    <hr class="border-gray-300 mt-4">
+    <br>
+    <label class="mr-2" for="phone-number">Phone Number</label>
+    <input class="rounded-sm p-1 border-2 border-gray-300" @bind="@i.Phone" id="phone-number" name="phone-number"
+        placeholder="000-000-0000" disabled>
+    <br>
+    <hr class="border-gray-300 mt-4">
+    <br>
+    <label class="mr-2" for="provinces">Provinces</label>
+    <select class="rounded-sm p-1 border-2 border-gray-300" @bind="province2" id="provinces" name="provinces" required>
+        @foreach (var pro in provincias)
+        {
+            <option value="@pro.Province1">@pro.Province1</option>
+        }
+
+    </select>
+    <br>
+    <hr class="border-gray-300 mt-4">
+    <br>
+    <label class="mr-2" for="vaccines">Vaccines</label>
+    <select class="rounded-sm p-1 border-2 border-gray-300" @bind="vaccine2" id="vaccines" name="vaccines" required>
+        @foreach (var pro in vacunas)
+        {
+            <option value="@pro.Vaccine1">@pro.Vaccine1</option>
+        }
+
+    </select>
+    <input class="rounded-sm p-1 border-2 border-gray-300" type="date" min="2022-3-14" @bind="@i.DateVaccine" required>
+    <br>
+    <br>
+    <button class="m-1 p-2 bg-green-600 text-white rounded-sm hover:bg-green-800 transition-colors duration-500"
+        @onclick="otra_dosis">Add second dose</button>
+</div>
+@*         <h3>@i.Name</h3>
         <h3>@i.LastName</h3>
         <h3>@i.Cedula</h3>
         <h3>@i.Phone</h3>
@@ -80,50 +149,18 @@ else
         <h3>@i.Vaccine</h3>
         <h3>@i.Province</h3>
         <h3>@i.ZodiacSign</h3>
-        <h3>@i.DateVaccine</h3>
+        <h3>@i.DateVaccine</h3> *@
     }
-
-    <select @bind="vaccine">
-        <option>Vacunas</option>
-        @if (vacunas == null)
-        {
-            <option>No ha agregado ningun tipo de vacuna</option>
-        }
-        else
-        {
-            @foreach (var pro in vacunas)
-            {
-                <option value="@pro.Vaccine1">@pro.Vaccine1</option>
-            }
-        }
-    </select>
-
-    <select @bind="province">
-        <option>Provincias</option>
-        @if (provincias == null)
-        {
-            <option>No ha agregado ninguna provincia</option>
-        }
-        else
-        {
-            @foreach (var pro in provincias)
-            {
-                <option value="@pro.Province1">@pro.Province1</option>
-            }
-        }
-
-    </select>
-
-    <input type="date" min="2022-3-14" @bind="dateVaccine" placeholder="Fecha de vacunacion">
-
-    <button @onclick="otra_dosis"></button>
 }
+</div>
 
 @code {
     List<Province> provincias = new vaccinationsContext().Provinces.ToList();
     List<Vaccine> vacunas = new vaccinationsContext().Vaccines.ToList();
 
-    string hiden = "display:none";
+    string hiden = "hidden";
+    string daDOSIS = "hidden";
+
     string hoden = "display:none";
     string name { get; set; }
     string lastName { get; set; }
@@ -132,6 +169,11 @@ else
     DateOnly? birthDate = new DateOnly(1950, 01, 01);
     string vaccine { get; set; }
     string province { get; set; }
+
+
+    string vaccine2 { get; set; }
+    string province2 { get; set; }
+
     string zodiacSign { get; set; }
     DateOnly dateVaccine = new DateOnly(2022, 01, 01);
     private List<Vaccinated> vacunados;
@@ -168,6 +210,7 @@ else
 
     public bool exists(string NCedula, int existe)
     {
+        string cedula_out_sign = NCedula.Replace("-","");
         bool exixste_o_no = false;
         if (existe == 1)
         {
@@ -214,7 +257,6 @@ else
 
                 }
             }
-            Console.WriteLine(counter);
             return exixste_o_no;
         }
 
@@ -241,23 +283,30 @@ else
                 Cedula = cedula,
                 Phone = phone,
                 BirthDate = birthDate,
-                Vaccine = vaccine,
-                Province = province,
+                Vaccine = vaccine2,
+                Province = province2,
                 ZodiacSign = zodiacSign,
                 DateVaccine = dateVaccine
             });
             db.SaveChanges();
             limpiar_variables();
+                        daDOSIS = "";
+
+            vacunados =null;
+
         }
     }
 
     public void guardar()
     {
+            daDOSIS = "hidden";
 
         if (exists(cedula) == 1)
         {
             Console.WriteLine("Ya hay un usuario con esta cedula");
             vacunados = new vaccinationsContext().Vaccinateds.Where(s => s.Cedula == cedula).ToList();
+                            hiden="hidden";
+
             limpiar_variables();
             return;
         }
@@ -271,7 +320,7 @@ else
         {
             if (campos_vacios())
             {
-                hiden = "display:none";
+                hiden="hidden";
                 var date = new DateOnly();
                 using (var vacuna = new vaccinationsContext())
                 {
@@ -297,7 +346,7 @@ else
             }
             else
             {
-                hoden = "display:block";
+                hiden = "";
             }
         }
     }
