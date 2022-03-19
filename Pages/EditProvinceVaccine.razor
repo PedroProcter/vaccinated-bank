@@ -1,0 +1,102 @@
+@page "/editProvinceAndVaccine"
+
+
+<h1>Seleccione lo que desea editar</h1>
+<select @onchange="edition">
+    <option></option>
+    <option value="provincia">Provincias</option>
+    <option value="vacunas">vacunas </option>
+</select>
+
+@if(edicion == "provincia"){
+<select  @onchange="actualizar">
+@foreach (var i in provincias){
+    <option value="@i.IdProvincia, @i.Province1">@i.Province1</option>
+}
+</select>
+
+<input @bind="datos">
+<button @onclick="actualizar2">actualizar</button>
+<button @onclick="eliminar">elimnar</button>
+}else if(edicion == "vacunas"){
+
+<select @onchange="actualizar">
+@foreach (var i in vacunas){
+    <option value="@i.Idvaccine,@i.Vaccine1">@i.Vaccine1</option>
+
+}
+</select>
+<input @bind="datos">
+<button @onclick="actualizar2">actualizar</button>
+<button @onclick="eliminar">elimnar</button>
+
+}
+
+@code{
+    private string edicion { get; set; }
+private int id {get; set;}
+private string datos { get; set; }
+dynamic provincias = new vaccinationsContext().Provinces;
+dynamic vacunas = new vaccinationsContext().Vaccines;
+
+public void edition(ChangeEventArgs e){
+
+edicion = e.Value.ToString();
+datos = string.Empty;
+}
+public void actualizar(ChangeEventArgs e){
+    string valores = e.Value.ToString();
+    string espacios = valores.Substring(2);
+    datos = espacios.Replace(" ","");
+    id = Convert.ToInt32(valores.Substring(0,1));
+
+}
+
+public void actualizar2(){
+    if(edicion == "provincia"){
+                var provinciasAgregadas = new Province{IdProvincia = id};  
+                     using(var db = new vaccinationsContext()){
+ db.Provinces.Attach(provinciasAgregadas);
+provinciasAgregadas.Province1 = datos;
+db.SaveChanges();
+limpiarVariables();
+    }
+     
+
+} 
+else if(edicion == "vacunas"){
+                    var vacunasAgregadas = new Vaccine{Idvaccine = id};  
+                     using(var db = new vaccinationsContext()){
+ db.Vaccines.Attach(vacunasAgregadas);
+vacunasAgregadas.Vaccine1 = datos;
+db.SaveChanges();
+limpiarVariables();
+}
+}
+
+}
+
+public void eliminar(){
+        if(edicion == "provincia"){
+                var provinciasAgregadas = new Province{IdProvincia = id};  
+                     using(var db = new vaccinationsContext()){
+ db.Provinces.Attach(provinciasAgregadas);
+ db.Provinces.Remove(provinciasAgregadas);
+db.SaveChanges();
+limpiarVariables();
+    }
+} else if(edicion == "vacunas"){
+                    var vacunasAgregadas = new Vaccine{Idvaccine = id};  
+                     using(var db = new vaccinationsContext()){
+ db.Vaccines.Attach(vacunasAgregadas);
+ db.Vaccines.Remove(vacunasAgregadas);
+db.SaveChanges();
+limpiarVariables();
+}
+}
+}
+public void limpiarVariables(){
+    datos = string.Empty;
+}
+
+}

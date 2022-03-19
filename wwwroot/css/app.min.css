@@ -520,6 +520,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .min-w-\[184px\] {
   min-width: 184px;
 }
+.min-w-\[204px\] {
+  min-width: 204px;
+}
 .max-w-\[16em\] {
   max-width: 16em;
 }

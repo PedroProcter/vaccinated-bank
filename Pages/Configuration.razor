@@ -14,13 +14,19 @@
         <input class="rounded-sm p-2 border-2 border-gray-300" @bind="provincia" placeholder="Province">
         <button class="m-1 p-2 bg-green-600 text-white rounded-sm hover:bg-green-800 transition-colors duration-500"
             @onclick="addProvince">Add</button>
+            <a href="/editProvinceAndVaccine" class="m-1 p-2 bg-green-600 text-white rounded-sm hover:bg-green-800 transition-colors duration-500"
+            >Edit</a>
     </section>
+
     <br>
     <section class="p-5">
         <h2 class="text-2xl text-bold text-gray-500 mb-3">Vaccine</h2>
         <input class="rounded-sm p-2 border-2 border-gray-300" @bind="vacuna" placeholder="Vaccine">
         <button class="m-1 p-2 bg-green-600 text-white rounded-sm hover:bg-green-800 transition-colors duration-500"
             @onclick="addVaccine">Add</button>
+                        <a href="/editProvinceAndVaccine" class="m-1 p-2 bg-green-600 text-white rounded-sm hover:bg-green-800 transition-colors duration-500"
+            >Edit</a>
+
     </section>
 
 </form>
