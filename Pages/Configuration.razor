@@ -1,0 +1,71 @@
+@page "/configuration"
+
+
+<PageTitle>Vaccinated - Configuration</PageTitle>
+
+<h1 class="mt-10 ml-2 text-3xl font-black text-gray-600">Configuration</h1>
+<hr class="border-gray-300">
+<span class="oi oi-moon absolute top-4 right-5 text-2xl hover:text-blue-900 transition-colors duration-500"></span>
+<span
+    class="oi oi-sun absolute top-4 right-5 text-2xl hover:text-amber-600 transition-colors duration-500 hidden"></span>
+<form class="m-10">
+    <section class="p-5">
+        <h2 class="text-2xl text-bold text-gray-500 mb-3">Province</h2>
+        <input class="rounded-sm p-2 border-2 border-gray-300" @bind="provincia" placeholder="Province">
+        <button class="m-1 p-2 bg-green-600 text-white rounded-sm hover:bg-green-800 transition-colors duration-500"
+            @onclick="addProvince">Add</button>
+        <a href="/editProvinceAndVaccine"
+            class="m-2 p-3 bg-yellow-600 text-white rounded-sm hover:bg-yellow-800 transition-colors duration-500">Edit</a>
+    </section>
+
+    <br>
+    <section class="p-5">
+        <h2 class="text-2xl text-bold text-gray-500 mb-3">Vaccine</h2>
+        <input class="rounded-sm p-2 border-2 border-gray-300" @bind="vacuna" placeholder="Vaccine">
+        <button class="m-1 p-2 bg-green-600 text-white rounded-sm hover:bg-green-800 transition-colors duration-500"
+            @onclick="addVaccine">Add</button>
+        <a href="/editProvinceAndVaccine"
+            class="m-2 p-3 bg-yellow-600 text-white rounded-sm hover:bg-yellow-800 transition-colors duration-500">Edit</a>
+
+    </section>
+
+</form>
+
+
+@code {
+    private string value_province = "provincia";
+    private string value_vacinne = "vacuna";
+
+    private string provincia { get; set; }
+    private string vacuna { get; set; }
+
+    public async void addVaccine()
+    {
+
+        using (var db = new vaccinationsContext())
+        {
+            db.Add(new Vaccine
+            {
+                Vaccine1 = vacuna
+            });
+
+            await db.SaveChangesAsync();
+        }
+
+    }
+    public async void addProvince()
+    {
+
+        using (var db = new vaccinationsContext())
+        {
+            db.Add(new Province
+            {
+                Province1 = provincia
+            });
+
+            await db.SaveChangesAsync();
+        }
+
+    }
+
+}

@@ -1,0 +1,50 @@
+﻿<div class="top-row">
+    <span id="menu" class="oi oi-menu absolute top-4 left-2 text-white text-3xl hidden" onclick="if (document.getElementById('nav').style.display == 'block') {
+            document.getElementById('nav').style.display = 'none';
+        } else {
+            document.getElementById('nav').style.display = 'block';
+        }"></span>
+    <div class="text-center my-3">
+        <a class="text-5xl font-bold text-white" href="">Tt</a>
+        <button title="" class="">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div id="nav">
+    <nav class="flex flex-col items-center">
+        <div class="nav-item my-5 mt-10">
+            <NavLink
+                class="nav-link p-3 text-center bg-green-100 rounded-full transition-all duration-500 hover:rounded-xl"
+                href="" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span>
+            </NavLink>
+        </div>
+        <div class="nav-item my-5">
+            <NavLink
+                class="nav-link p-3 text-center bg-green-100 rounded-full transition-all duration-500 hover:rounded-xl flex items-center"
+                href="peopleVaccinated">
+                <span class="oi oi-person" aria-hidden="true"></span>
+            </NavLink>
+        </div>
+        <div class="nav-item my-5">
+            <NavLink class="nav-link p-3 text-center bg-green-100 rounded-full hover:rounded-xl flex items-center"
+                href="editRegisters">
+                <span class="oi oi-plus" aria-hidden="true"></span>
+            </NavLink>
+        </div>
+        <div class="nav-item my-5">
+            <NavLink class="nav-link p-3 px-4 text-center bg-green-100 rounded-full hover:rounded-xl flex items-center"
+                href="about">
+                <span class="oi oi-info" aria-hidden="true"></span>
+            </NavLink>
+        </div>
+        <div class="nav-item my-5">
+            <NavLink class="nav-link p-3 text-center bg-green-100 rounded-full hover:rounded-xl flex items-center"
+                href="configuration">
+                <span class="oi oi-cog" aria-hidden="true"></span>
+            </NavLink>
+        </div>
+    </nav>
+</div>

@@ -1,0 +1,25 @@
+
+.oi {
+    font-size: 18px;
+    color: #546856;
+}
+
+#nav {
+    transition: all 0.5s;
+}
+
+@media (min-width: 641px) {
+    #nav {
+        display: block !important;
+    }
+}
+
+@media (max-width: 640px) {
+    #nav {
+        display: none;
+    }
+
+    #menu {
+        display: block;
+    }
+}

@@ -1,0 +1,29 @@
+.page {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    background-color: rgb(240, 240, 240);
+}
+
+main {
+    flex: 1;
+    background-color: rgb(240, 240, 240);
+}
+
+.sidebar {
+    background-color: #8BA88E;
+}
+
+@media (min-width: 641px) {
+    .page {
+        flex-direction: row;
+    }
+
+    .sidebar {
+        width: 88px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+    }
+}

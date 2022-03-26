@@ -1,0 +1,526 @@
+@page "/editRegisters"
+@using System.Threading
+<PageTitle>Vaccinated - Edit</PageTitle>
+
+<div class="flex justify-between">
+<h1 class="mt-10 ml-2 text-3xl font-black text-gray-600">Edit</h1>
+<div class="flex justify-center items-center">
+
+</div>
+<div></div>
+</div>
+
+<hr class="border-gray-300">
+<span class="oi oi-moon absolute top-4 right-5 text-2xl hover:text-blue-900 transition-colors duration-500"></span>
+<span
+    class="oi oi-sun absolute top-4 right-5 text-2xl hover:text-amber-600 transition-colors duration-500 hidden"></span>
+<div class="flex flex-wrap">
+<div class="m-7 p-5 min-w-[500px] max-w-[588px] bg-gray-200 rounded-md shadow-xl border-r-2 border-l-2 border-b-2 border-gray-300">
+    <h2 class="text-2xl text-bold text-gray-500">Add</h2>
+    <hr class="border-gray-400 mt-2 mb-3">
+    <label class="mr-2" for="name">Name</label>
+    <input class="m-2 rounded-sm p-1 border-2 border-gray-300" @bind="name" id="name" name="name" placeholder="Amaudis"
+        required>
+    <br>
+    <label class="mr-2" for="lastname">Lastname</label>
+    <input class="rounded-sm p-1 border-2 border-gray-300" @bind="lastName" id="lastname" name="lastname"
+        placeholder="Suarez">
+    <br>
+    <hr class="border-gray-300 mt-4">
+    <br>
+    <label class="mr-2" for="cedula">Cedula</label>
+    <input class="m-2 rounded-sm p-1 border-2 border-gray-300" @bind="cedula" id="cedula" name="cedula"
+        placeholder="cedula" required>
+    <br>
+    <label class="mr-2" for="birthday">Birthday</label>
+    <input class="rounded-sm p-1 border-2 border-gray-300" type="date" @bind="birthDate" id="birthday" name="birthday"
+        min="1950-1-1" required>
+    <br>
+    <hr class="border-gray-300 mt-4">
+    <br>
+    <label class="mr-2" for="phone-number">Phone Number</label>
+    <input class="rounded-sm p-1 border-2 border-gray-300" @bind="phone" id="phone-number" name="phone-number"
+        placeholder="000-000-0000">
+    <br>
+    <hr class="border-gray-300 mt-4">
+    <br>
+    <label class="mr-2" for="provinces">Provinces</label>
+    <select class="rounded-sm p-1 border-2 border-gray-300" @bind="province" id="provinces" name="provinces" required>
+        <option>Province</option>
+        @foreach (var i in provincias)
+        {
+            <option value="@i.Province1">@i.Province1</option>
+        }
+
+    </select>
+    <br>
+    <hr class="border-gray-300 mt-4">
+    <br>
+    <label class="mr-2" for="vaccines">Vaccines</label>
+    <select class="rounded-sm p-1 border-2 border-gray-300" @bind="vaccine" id="vaccines" name="vaccines" required>
+        <option>Vaccine</option>
+        @foreach (var pro in vacunas)
+        {
+            <option value="@pro.Vaccine1">@pro.Vaccine1</option>
+        }
+
+    </select>
+    <input class="rounded-sm p-1 border-2 border-gray-300" type="date" min="2022-3-14" @bind="dateVaccine" required>
+    <br>
+    <br>
+    <button class="m-1 p-2 bg-green-600 text-white rounded-sm hover:bg-green-800 transition-colors duration-500"
+        @onclick="guardar">Guardar</button>
+    <div class="@hiden transition-all duration-500 border px-4 py-5 border-yellow-400 bg-yellow-300 text-yellow-900">
+        @yellow_banner
+    </div> 
+
+    <div class="@daDOSIS transition-all duration-500 border px-4 py-5 border-green-400 bg-green-300 text-green-900">
+        Segunda dosis agregada con exito
+    </div> 
+</div>
+
+<br>
+
+@if (vacunados == null){
+}else{
+    @foreach (var i in vacunados)
+    {
+
+    <div class="m-10 p-5 min-w-[500px] max-w-[588px] bg-gray-200 rounded-md shadow-xl border-r-2 border-l-2 border-b-2 border-gray-300">
+    <h2 class="text-2xl text-bold text-gray-500 mb-3">second dose</h2>
+    <label class="mr-2" for="name">Name</label>
+    <input class="m-2 rounded-sm p-1 border-2 border-gray-300" @bind="i.Name" id="name" name="name" placeholder="Amadis"
+        required disabled>
+    <br>
+    <label class="mr-2" for="lastname">Lastname</label>
+    <input class="rounded-sm p-1 border-2 border-gray-300" @bind="@i.LastName" id="lastname" name="lastname"
+        placeholder="Suarez" disabled>
+    <br>
+    <hr class="border-gray-300 mt-4">
+    <br>
+    <label class="mr-2" for="cedula">Cedula</label>
+    <input class="m-2 rounded-sm p-1 border-2 border-gray-300" @bind="@i.Cedula" id="cedula" name="cedula"
+        placeholder="cedula" required disabled>
+    <br>
+    <label class="mr-2" for="birthday">Birthday</label>
+    <input class="rounded-sm p-1 border-2 border-gray-300" type="date" @bind="@i.BirthDate" id="birthday" name="birthday"
+        min="1950-1-1" required disabled>
+    <br>
+    <hr class="border-gray-300 mt-4">
+    <br>
+    <label class="mr-2" for="phone-number">Phone Number</label>
+    <input class="rounded-sm p-1 border-2 border-gray-300" @bind="@i.Phone" id="phone-number" name="phone-number"
+        placeholder="000-000-0000" disabled>
+    <br>
+    <hr class="border-gray-300 mt-4">
+    <br>
+    <label class="mr-2" for="provinces">Provinces</label>
+    <select class="rounded-sm p-1 border-2 border-gray-300" @bind="province2" id="provinces" name="provinces" required>
+        <option>Province</option>
+        @foreach (var pro in provincias)
+        {
+            <option value="@pro.Province1">@pro.Province1</option>
+        }
+
+    </select>
+    <br>
+    <hr class="border-gray-300 mt-4">
+    <br>
+    <label class="mr-2" for="vaccines">Vaccines</label>
+    <select class="rounded-sm p-1 border-2 border-gray-300" @bind="vaccine2" id="vaccines" name="vaccines" required>
+        <option>Vaccine</option>
+        @foreach (var pro in vacunas)
+        {
+            <option value="@pro.Vaccine1">@pro.Vaccine1</option>
+        }
+
+    </select>
+    <input class="rounded-sm p-1 border-2 border-gray-300" type="date" min="2022-3-14" @bind="@i.DateVaccine" required>
+    <br>
+    <br>
+    <button class="m-1 p-2 bg-green-600 text-white rounded-sm hover:bg-green-800 transition-colors duration-500"
+        @onclick="otra_dosis">Add second dose</button>
+    <div class="@hiden transition-all duration-500 border px-4 py-5 border-yellow-400 bg-yellow-300 text-yellow-900">
+        Debe llenar todos los campos para registrarse
+    </div> 
+
+    <div class="@daDOSIS transition-all duration-500 border px-4 py-5 border-green-400 bg-green-300 text-green-900">
+        Segunda dosis agregada con exito
+    </div> 
+</div>
+@*         <h3>@i.Name</h3>
+        <h3>@i.LastName</h3>
+        <h3>@i.Cedula</h3>
+        <h3>@i.Phone</h3>
+        <h3>@i.BirthDate</h3>
+        <h3>@i.Vaccine</h3>
+        <h3>@i.Province</h3>
+        <h3>@i.ZodiacSign</h3>
+        <h3>@i.DateVaccine</h3> *@
+    }
+}
+</div>
+
+@code {
+    List<Province> provincias = new vaccinationsContext().Provinces.ToList();
+    List<Vaccine> vacunas = new vaccinationsContext().Vaccines.ToList();
+
+    string hiden = "hidden";
+    string yellow_banner = "There is missing data";
+    string daDOSIS = "hidden";
+
+    string hoden = "display:none";
+    string name { get; set; }
+    string lastName { get; set; }
+    string cedula { get; set; }
+    string phone { get; set; }
+    DateOnly? birthDate = new DateOnly(1950, 01, 01);
+    string vaccine { get; set; }
+    string province { get; set; }
+
+
+    string vaccine2 { get; set; }
+    string province2 { get; set; }
+
+    string zodiacSign { get; set; }
+    DateOnly dateVaccine = new DateOnly(2022, 01, 01);
+    private List<Vaccinated> vacunados;
+
+    public bool campos_vacios()
+    {
+        bool vacio = true;
+        if (name == null || name == "")
+        {
+            vacio = false;
+        }
+        else if (lastName == null || lastName == "")
+        {
+            vacio = false;
+        }
+        else if (cedula == null || cedula == "")
+        {
+            vacio = false;
+        }
+        else if (phone == null || phone == "")
+        {
+            vacio = false;
+        }
+        else if (vaccine == null || vaccine == "" || vaccine == "Vaccine")
+        {
+            vacio = false;
+        }
+        else if (province == null || province == "" || province =="Province")
+        {
+            vacio = false;
+        }
+        yellow_banner = "There is missing data";
+        return vacio;
+    }
+
+    public bool exists(string NCedula, int existe)
+    {
+        string cedula_out_sign = NCedula.Replace("-","");
+        bool exixste_o_no = false;
+        if (existe == 1)
+        {
+            using (var db = new vaccinationsContext())
+            {
+                foreach (var i in db.Vaccinateds)
+                {
+                    if (NCedula == i.Cedula)
+                    {
+                        exixste_o_no = true;
+                    }
+                }
+            }
+        }
+        return exixste_o_no;
+    }
+
+    public int exists(string NCedula)
+    {
+        int counter = 0;
+        int exixste_o_no = 0;
+        using (var db = new vaccinationsContext())
+        {
+            foreach (var i in db.Vaccinateds)
+            {
+
+                if (NCedula == i.Cedula)
+                {
+                    counter++;
+                }
+                if (counter == 1)
+                {
+                    hiden = "display:block";
+                    exixste_o_no = 1;
+                }
+                if (counter > 1)
+                {
+                    exixste_o_no = 2;
+                }
+                if (counter == 0)
+                {
+                    hiden = "display:none";
+                    exixste_o_no = 0;
+
+                }
+            }
+            return exixste_o_no;
+        }
+
+    }
+
+    public void otra_dosis()
+    {
+        foreach (var i in vacunados)
+        {
+            name = i.Name;
+            lastName = i.LastName;
+            cedula = i.Cedula;
+            phone = i.Phone;
+            birthDate = i.BirthDate;
+            zodiacSign = i.ZodiacSign;
+        }
+        
+        if (vaccine2 == null || vaccine2 == "" || vaccine2 == "Vaccine")
+        {
+            hiden = "";
+        }
+        else if (province2 == null || province2 == "" || province2 =="Province")
+        {
+            hiden = "";
+        } else {
+            using (var db = new vaccinationsContext())
+            {
+                db.Add(new Vaccinated
+                {
+                    Name = name,
+                    LastName = lastName,
+                    Cedula = cedula,
+                    Phone = phone,
+                    BirthDate = birthDate,
+                    Vaccine = vaccine2,
+                    Province = province2,
+                    ZodiacSign = zodiacSign,
+                    DateVaccine = dateVaccine
+                });
+                db.SaveChanges();
+                hiden = "hidden";
+                limpiar_variables();
+                            daDOSIS = "";
+
+                vacunados =null;
+            }
+        }
+    }
+
+    public void guardar()
+    {
+            daDOSIS = "hidden";
+
+        if (exists(cedula) == 1)
+        {
+            Console.WriteLine("Ya hay un usuario con esta cedula");
+            yellow_banner = "ID already in use";
+            vacunados = new vaccinationsContext().Vaccinateds.Where(s => s.Cedula == cedula).ToList();
+                            hiden="hidden";
+
+            limpiar_variables();
+            return;
+        }
+        else if (exists(cedula) == 2)
+        {
+            Console.WriteLine("Este usuraio ya tiene 2 dosis");
+            yellow_banner = "Already has two vaccines";
+            limpiar_variables();
+            return;
+        }
+        else
+        {
+            if (campos_vacios())
+            {
+                hiden="hidden";
+                yellow_banner = "There is missing data";
+                var date = new DateOnly();
+                using (var vacuna = new vaccinationsContext())
+                {
+                    vacuna.Add(new Vaccinated
+                    {
+
+                        Name = name,
+                        LastName = lastName,
+                        Cedula = cedula,
+                        Phone = phone,
+                        BirthDate = birthDate,
+                        Vaccine = vaccine,
+                        Province = province,
+                        ZodiacSign = sing(birthDate),
+                        DateVaccine = dateVaccine
+
+                    });
+                    vacuna.SaveChanges();
+                    limpiar_variables();
+                    Console.WriteLine("Datos Guardados");
+                }
+
+            }
+            else
+            {
+                hiden = "";
+            }
+        }
+    }
+
+    public void limpiar_variables()
+    {
+        name = string.Empty;
+        lastName = string.Empty;
+        cedula = string.Empty;
+        phone = string.Empty;
+        birthDate = new DateOnly(1950, 01, 01);
+        vaccine = "Vacunas";
+        province = "Provincias";
+        zodiacSign = string.Empty;
+        dateVaccine = new DateOnly(2022, 01, 01);
+        yellow_banner = "There is missing data";
+    }
+
+    public string sing(dynamic date)
+    {
+        int mes = 0;
+        int dia = 0;
+
+        mes = date.Month;
+        dia = date.Day;
+
+        string signo = "";
+        switch (mes)
+        {
+            case 1:
+                if (dia > 21)
+                {
+                    signo = "ACUARIO";
+                }
+                else
+                {
+                    signo = "CAPRICORNIO";
+                }
+                break;
+            case 2:
+                if (dia > 19)
+                {
+                    signo = "PISCIS";
+                }
+                else
+                {
+                    signo = "ACUARIO";
+                }
+                break;
+            case 3:
+                if (dia > 20)
+                {
+                    signo = "ARIES";
+                }
+                else
+                {
+                    signo = "PISCIS";
+                }
+                break;
+            case 4:
+                if (dia > 20)
+                {
+                    signo = "TAURO";
+                }
+                else
+                {
+                    signo = "ARIES";
+                }
+                break;
+            case 5:
+                if (dia > 21)
+                {
+                    signo = "GEMINIS";
+                }
+                else
+                {
+                    signo = "TAURO";
+                }
+                break;
+            case 6:
+                if (dia > 20)
+                {
+                    signo = "CANCER";
+                }
+                else
+                {
+                    signo = "GEMINIS";
+                }
+                break;
+            case 7:
+                if (dia > 22)
+                {
+                    signo = "LEO";
+                }
+                else
+                {
+                    signo = "CANCER";
+                }
+                break;
+            case 8:
+                if (dia > 21)
+                {
+                    signo = "VIRGO";
+                }
+                else
+                {
+                    signo = "LEO";
+                }
+                break;
+            case 9:
+                if (dia > 22)
+                {
+                    signo = "LIBRA";
+                }
+                else
+                {
+                    signo = "VIRGO";
+                }
+                break;
+            case 10:
+                if (dia > 22)
+                {
+                    signo = "ESCORPIO";
+                }
+                else
+                {
+                    signo = "LIBRA";
+                }
+                break;
+            case 11:
+                if (dia > 21)
+                {
+                    signo = "SAGITARIO";
+                }
+                else
+                {
+                    signo = "ESCORPION";
+                }
+                break;
+            case 12:
+                if (dia > 21)
+                {
+                    signo = "CAPRICORNIO";
+                }
+                else
+                {
+                    signo = "SAGITARIO";
+                }
+                break;
+
+        }
+        return signo;
+
+
+    }
+}

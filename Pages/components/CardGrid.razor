@@ -1,0 +1,195 @@
+<article class="mt-10 ml-10 flex items-start">
+    <section>
+        <label class="mr-1" for="filter">Search</label>
+        <input class="mr-10 border-2 border-gray-300" @bind="@filter" @bind:event="oninput" id="filter" name="filter"
+            type="text" placeholder="Name of people">
+    </section>
+
+    <section>
+        <label for="order-by">Order By</label>
+        <select class="border-2 border-gray-300" @bind="@order_by" id='order-by' name='order-by'>
+            <option>Name</option>
+            <option>Province</option>
+            <option>Vaccine</option>
+            <option>Zodiac Sign</option>
+        </select>
+    </section>
+</article>
+
+<article class="m-10 grid grid-cols-fill-40 justify-center justify-items-stretch gap-10">
+    @if (@order_by == "Province")
+    {
+        @if (select_group_by_province != null)
+        {
+            @foreach (var i in select_group_by_province)
+            {
+                if (filter != null && filter != "")
+                {
+                    if (@i.Province.ToLower().Contains(@filter.ToLower()))
+                    {
+                        <section class="bg-white text-center rounded-md shadow-xl min-h-[276px] min-w-[184px]">
+                            <h3 class="m-5 text-md font-bold text-gray-800">@i.Name @i.LastName</h3>
+                        <p><b>Cedula</b></p>
+                        <p class="m-2" >@i.Cedula</p>
+                        <p><b>Phone Number</b></p>
+                        <p class="m-2 mx-5" >@i.Phone</p>
+                        <p><b>Vaccine Date</b></p>
+                        <p class="m-2 mx-5" >@i.DateVaccine</p>
+                        <p><b>Vaccine</b></p>
+                        <p class="m-2 mx-5" >@i.Vaccine</p>
+                        <p class="text-md font-bold text-white m-5 p-3 bg-violet-500 rounded-sm">@i.Province</p>
+                        </section>
+                    }
+                }
+                else
+                {
+                    <section class="bg-white text-center rounded-md shadow-xl min-h-[276px] min-w-[184px]">
+                        <h3 class="m-5 text-md font-bold text-gray-800">@i.Name @i.LastName</h3>
+                        <p><b>Cedula</b></p>
+                        <p class="m-2" >@i.Cedula</p>
+                        <p><b>Phone Number</b></p>
+                        <p class="m-2 mx-5" >@i.Phone</p>
+                        <p><b>Vaccine Date</b></p>
+                        <p class="m-2 mx-5" >@i.DateVaccine</p>
+                        <p><b>Vaccine</b></p>
+                        <p class="m-2 mx-5" >@i.Vaccine</p>
+                        <p class="text-md font-bold text-white m-5 p-3 bg-violet-500 rounded-sm">@i.Province</p>
+                    </section>
+                }
+            }
+        }
+    }
+    else if (@order_by == "Vaccine")
+    {
+        @if (marcas_vacunas != null)
+        {
+            OnInitialized();
+            @foreach (var i in marcas_vacunas)
+            {
+                <section class="bg-white text-center rounded-md shadow-xl min-h-[276px] min-w-[184px]">
+                    <h3 class="text-xl font-bold text-white m-5 p-5 bg-violet-500 rounded-sm">@i.provin</h3>
+                    <p><span class="text-md text-gray-500">count</span> <br> @i.vacunados</p>
+                </section>
+            }
+
+            <Chart Config="_config"></Chart>
+        }
+    }
+    else if (@order_by == "Zodiac Sign")
+    {
+        @if (signo != null)
+        {
+            @foreach (var i in signo)
+            {
+                <section class="bg-white text-center rounded-md shadow-xl min-h-[276px] min-w-[184px]">
+                    <h3 class="text-xl font-bold text-white m-5 p-5 bg-red-500 rounded-sm">@i.signos</h3>
+                    <p><span class="text-md text-gray-500">count</span> <br> @i.vacunados</p>
+                </section>
+            }
+        }
+    }
+    else
+    {
+        @if (vaccinated != null)
+        {
+            @foreach (var i in vaccinated)
+            {
+                if (filter != null && filter != "")
+                {
+                    if (@i.Name.ToLower().Contains(@filter.ToLower()) || @i.LastName.ToLower().Contains(@filter.ToLower()))
+                    {
+                        <section class="bg-white text-center rounded-md shadow-xl min-h-[276px] min-w-[184px]">
+                            <h3 class="text-md font-black text-white m-5 p-3 bg-violet-500 rounded-sm">@i.Name @i.LastName</h3>
+                            <p>@i.Cedula</p>
+                            <p>@i.Vaccine</p>
+                            <button class="m-2 p-2 bg-red-600 text-white rounded-sm hover:bg-red-800 transition-colors duration-500"
+            @onclick="() => DeleteDose(i.Id)">Delete</button>
+                        </section>
+                    }
+                }
+                else
+                {
+                    <section class="bg-white text-center rounded-md shadow-xl min-h-[276px] min-w-[184px]">
+                        <h3 class="text-md font-black text-white m-5 p-3 bg-violet-500 rounded-sm">@i.Name @i.LastName</h3>
+                        <p>@i.Cedula</p>
+                        <p>@i.Vaccine</p>
+                        <button class="m-2 p-2 bg-red-600 text-white rounded-sm hover:bg-red-800 transition-colors duration-500"
+            @onclick="() => DeleteDose(i.Id)">Delete</button>
+                    </section>
+                }
+
+            }
+        }
+    }
+</article>
+
+@if (@order_by == "Vaccine")
+{
+    @if (marcas_vacunas != null)
+    {
+        <Chart Config="_config"></Chart>
+    }
+}
+
+@code {
+    string? order_by;
+    string? filter = null;
+
+    dynamic select_group_by_province = new vaccinationsContext().Vaccinateds.Select(x => x).OrderBy(s =>
+    s.Province).ToList();
+
+    dynamic marcas_vacunas = new vaccinationsContext().Vaccinateds.OrderBy(s => s.Vaccine).GroupBy(s => s.Vaccine).Select(s
+    => new
+    {
+        provin = s.Key,
+        vacunados = s.Count()
+    });
+    dynamic signo = new vaccinationsContext().Vaccinateds.OrderBy(s => s.ZodiacSign).GroupBy(s => s.ZodiacSign).Select(s =>
+    new
+    {
+        signos = s.Key,
+        vacunados = s.Count()
+    });
+    List<Vaccinated> vaccinated = new vaccinationsContext().Vaccinateds.Select(x => x).OrderBy(s => s.Name).ToList();
+
+    public void DeleteDose(int id)
+    {
+        vaccinationsContext context = new vaccinationsContext();
+        Vaccinated? target = context.Vaccinateds.Find(id);
+        context.Vaccinateds.Remove(target);
+        context.SaveChanges();
+        vaccinated = new vaccinationsContext().Vaccinateds.Select(x => x).OrderBy(s => s.Name).ToList();
+    }
+
+    private BarConfig _config;
+    public List<int> vaccinated_per_vaccine = new List<int>() { };
+
+    protected override void OnInitialized()
+    {
+        _config = new BarConfig
+        {
+            Options = new BarOptions
+            {
+                Responsive = true,
+                Title = new OptionsTitle
+                {
+                    Display = true,
+                    Text = "Vaccinated Per Vaccine"
+                }
+            }
+        };
+
+        foreach (var i in marcas_vacunas)
+        {
+            _config.Data.Labels.Add(i.provin);
+            vaccinated_per_vaccine.Add(i.vacunados);
+        }
+
+        BarDataset<int> dataset = new BarDataset<int>(vaccinated_per_vaccine)
+        {
+            BackgroundColor = ColorUtil.ColorHexString(75, 192, 192)
+        };
+
+        _config.Data.Datasets.Add(dataset);
+    }
+}
